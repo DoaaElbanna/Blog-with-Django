@@ -1,0 +1,126 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            {% block head_title %}
+                Django Project
+            {% endblock  %}
+        </title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+        <style>
+            {% block style %}{% endblock style %}
+        </style>
+        {% block head_extra %}
+        {% endblock %}
+    </head>
+
+    <body>
+       <div id="fb-root"></div>
+         <script>(function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2';
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+
+       <div class="container">
+           <nav aria-label="breadcrumb">
+               <ol class="breadcrumb">
+                   <li class="breadcrumb-item"><a href="{% url "posts:list" %}">Home</a> </li>
+                   {% block post_detail_link %}
+                   {% endblock %}
+                   {% if not request.user.is_authenticated %}
+                   <li class="breadcrumb-item pull-right"><a href="{% url "register" %}">Register</a> </li>
+                   <li class="breadcrumb-item pull-right"><a href="{% url "login" %}">Login</a> </li>
+                   {% else %}
+                   <li class="breadcrumb-item pull-right"><a href="{% url "logout" %}">Logout</a> </li>
+                   {% endif %}
+               </ol>
+           </nav>
+           {% block content %}{% endblock %}
+
+       </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <!-- library allow us to implement a function that allow to render the content to markdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.6.0/marked.min.js"></script>
+    <link rel='stylesheet' href='{% static "css/base.css" %}' />
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".content-markdown").each(function(){
+                var content = $(this).text()
+                var markedContent = marked(content)
+                $(this).html(markedContent)
+            })
+
+            $(".post-detail-item img").each(function(){
+                $(this).addClass("img-thumbnail img-fluid")
+            })
+
+            //preview-content
+            var contentInput = $("#id_content")
+            function setContent(value) {
+                var markedContent = marked(value)
+                $("#preview-content").html(markedContent)
+                $("#preview-content img").each(function () {
+                    $(this).addClass("img-thumbnail img-fluid")
+
+                })
+
+            }
+            setContent(contentInput.val())
+
+            // To be change the content dynamically
+            contentInput.keyup(function () {
+                var newContent = $(this).val()
+                setContent(newContent)
+
+            })
+
+            //preview-title
+            var titleInput = $("#id_title")
+            function setTitle(value) {
+                $("#preview-title").text(value)
+
+            }
+
+            setTitle(titleInput.val())
+
+            // To be change the title dynamically
+            titleInput.keyup(function () {
+               var newContent = $(this).val()
+                setTitle(newContent)
+
+            })
+
+            $(".comment-reply-btn").click(function (event) {
+                event.preventDefault(); // prevent the event of anchor (href)
+                $(this).parent().next(".comment-reply").fadeToggle();
+
+            })
+
+
+
+        })
+    </script>
+
+
+    </body>
+

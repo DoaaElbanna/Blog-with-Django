@@ -1,0 +1,19 @@
+body{
+    background-image: url("14.jpg");
+    background-size: cover;
+}
+h1{
+    color: #205067;
+}
+h2{
+    color: purple;
+}
+
+.wmd-panel {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.comment-reply{
+    display: none;
+}
